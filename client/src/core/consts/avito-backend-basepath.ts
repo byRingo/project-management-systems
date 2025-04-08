@@ -1,0 +1,1 @@
+export const AVITO_BACKEND_BASEPATH="http://localhost:8080/api/v1"
