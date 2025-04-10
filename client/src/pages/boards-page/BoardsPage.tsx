@@ -1,7 +1,7 @@
-import { useFetchBoards } from "../../shared/queries/boards-controller/boards/use-fetch-boards.ts";
+import { useFetchBoards } from "../../shared/queries/boards-controller/get-boards/use-fetch-boards.ts";
 import { BoardItem } from "../../components/board-item/BoardItem.tsx";
 
-export const BoardPage = () => {
+export const BoardsPage = () => {
   const { data: boards, isFetching } = useFetchBoards();
 
   if (isFetching) {
