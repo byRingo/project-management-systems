@@ -9,7 +9,7 @@ interface ITaskItem {
   boardId: number;
   boardName: string;
   description: string;
-  id: number;
+  id: string;
   priority: string;
   status: string;
   title: string;

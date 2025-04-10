@@ -1,5 +1,5 @@
 import { useFetchUsers } from "../../queries/users-controller/users/use-fetch-users.ts";
-import { useFetchBoards } from "../../queries/boards-controller/boards/use-fetch-boards.ts";
+import { useFetchBoards } from "../../queries/boards-controller/get-boards/use-fetch-boards.ts";
 
 export const useGetFormData = () => {
   const { data: users } = useFetchUsers();
@@ -26,7 +26,6 @@ export const useGetFormData = () => {
   ];
 
   const statusesData = [
-    { value: "", label: "" },
     { value: "Done", label: "Done" },
     { value: "InProgress", label: "In Progress" },
     { value: "Backlog", label: "Backlog" },

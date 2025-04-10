@@ -4,22 +4,22 @@ import { useFetchTask } from "../../shared/queries/tasks-controller/get-task/use
 import { ITaskBody } from "../../shared/queries/tasks-controller/post-task/types.ts";
 import { SelectUserItem } from "../select-user-item/SelectUserItem.tsx";
 import { updateTask } from "../../shared/queries/tasks-controller/update-task/update-task.ts";
-import { useEffect } from "react";
+import { ChangeEvent, useEffect } from "react";
+import { updateTaskStatus } from "../../shared/queries/tasks-controller/update-task-status/update-task-status.ts";
 
 interface ITaskFormProps {
   taskId: number | null;
   isModalOpen: boolean;
-  onCancel: () => void;
+  handleModalClose: () => void;
+  tasksRefetch: () => void;
 }
 
 export const UpdateForm = ({
   taskId,
   isModalOpen,
-  onCancel,
+  handleModalClose,
+  tasksRefetch,
 }: ITaskFormProps) => {
-  useEffect(() => {
-    console.log("render");
-  }, [taskId]);
   const [form] = Form.useForm();
   const { data: taskData, isFetching: isTaskFetching } = useFetchTask(taskId);
 
@@ -34,15 +34,19 @@ export const UpdateForm = ({
         assigneeId: taskData?.assignee.id,
       });
     }
-    //Проверить работоспособность
   }, [form, taskData, taskId]);
 
   const { users, projects, priorities, statuses } = useGetFormData();
 
+  const handleStatusChange = (e: ChangeEvent) => {
+    updateTaskStatus(taskId as number, { status: e as unknown as string });
+  };
+
   const onFinish = (values: ITaskBody) => {
     updateTask(taskId as number, values)
       .then(() => form.resetFields())
-      .then(() => onCancel());
+      .then(() => handleModalClose())
+      .then(() => tasksRefetch());
   };
 
   if (isTaskFetching) {
@@ -55,7 +59,7 @@ export const UpdateForm = ({
         title="Редактирование задачи"
         open={isModalOpen}
         footer={null}
-        onCancel={onCancel}
+        onCancel={handleModalClose}
       >
         <Form
           form={form}
@@ -106,7 +110,7 @@ export const UpdateForm = ({
             name="status"
             rules={[{ message: "Введите статус" }]}
           >
-            <Select options={statuses} />
+            <Select onChange={handleStatusChange} options={statuses} />
           </Form.Item>
           <Form.Item
             label="Исполнитель"

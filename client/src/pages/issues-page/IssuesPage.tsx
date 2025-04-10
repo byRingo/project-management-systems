@@ -4,43 +4,29 @@ import Search from "antd/es/input/Search";
 import { useState } from "react";
 import { Menu, MenuProps } from "antd";
 import { UpdateForm } from "../../components/update-form/UpdateForm.tsx";
-
-const STATUSES = [
-  { key: "", label: "Все" },
-  { key: "Done", label: "Done" },
-  { key: "InProgress", label: "In Progress" },
-  { key: "Backlog", label: "In Backlog" },
-];
-
-const items = [
-  {
-    key: "tasksStatus",
-    label: "Статус задачи",
-    children: [
-      { key: "0", label: "Все" },
-      { key: "1", label: STATUSES[1].label },
-      { key: "2", label: STATUSES[2].label },
-      { key: "3", label: STATUSES[3].label },
-    ],
-  },
-];
+import {
+  STATUSES,
+  useGetFiltersData,
+} from "../../shared/hooks/use-get-filters-data/use-get-filters-data.ts";
 
 export const IssuesPage = () => {
-  const [selectedTask, setSelectedTask] = useState<number | null>(null);
+  const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [filters, setFilters] = useState({
     text: "",
     statuses: "",
     boardId: "",
   });
-  const { data: tasks, isFetching } = useFetchTasks();
+  const { data: tasks, isFetching, refetch } = useFetchTasks();
+
+  const { projectFilter, statusFilter } = useGetFiltersData();
 
   const showModal = () => {
     setIsModalOpen(true);
   };
 
   const handleTaskClick = (taskId: number) => {
-    setSelectedTask(taskId);
+    setSelectedTaskId(taskId);
     showModal();
   };
 
@@ -60,6 +46,13 @@ export const IssuesPage = () => {
     setFilters((prev) => ({
       ...prev,
       statuses: newStatus ? newStatus : "",
+    }));
+  };
+
+  const toggleProject: MenuProps["onClick"] = (status) => {
+    setFilters((prev) => ({
+      ...prev,
+      boardId: status.key,
     }));
   };
 
@@ -87,13 +80,21 @@ export const IssuesPage = () => {
 
   return (
     <>
-      {selectedTask}
       <Search
         style={{ width: "100px" }}
         value={filters.text}
         onChange={(e) => updateFilter("text", e.target.value)}
       />
-      <Menu style={{ width: "150px" }} items={items} onClick={toggleStatus} />
+      <Menu
+        style={{ width: "150px" }}
+        items={statusFilter}
+        onClick={toggleStatus}
+      />
+      <Menu
+        style={{ width: "150px" }}
+        items={projectFilter}
+        onClick={toggleProject}
+      />
       <div
         style={{
           padding: "16px",
@@ -109,15 +110,16 @@ export const IssuesPage = () => {
               status={taskItem.status}
               title={taskItem.title}
               key={`${taskItem.title} + ${taskItem.id}`}
-              onClick={() => handleTaskClick(taskItem?.id)}
+              onClick={() => handleTaskClick(taskItem?.id as unknown as number)}
             />
           );
         })}
         {!filteredTasks?.length && <div>Задачи не найдены</div>}
         <UpdateForm
-          taskId={selectedTask}
+          taskId={selectedTaskId}
           isModalOpen={isModalOpen}
-          onCancel={handleCancel}
+          handleModalClose={handleCancel}
+          tasksRefetch={refetch}
         />
       </div>
     </>
