@@ -8,6 +8,15 @@ import {
   STATUSES,
   useGetFiltersData,
 } from "../../shared/hooks/use-get-filters-data/use-get-filters-data.ts";
+import {
+  FilterTitle,
+  IssuesPageBody,
+  IssuesPageFilters,
+  IssuesPageFiltersState,
+  IssuesPageFiltersWrapper,
+  IssuesPageStyled,
+} from "./issues-page.styled.ts";
+import { CustomSpin } from "../../components/custom-spin/CustomSpin.tsx";
 
 export const IssuesPage = () => {
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
@@ -75,53 +84,69 @@ export const IssuesPage = () => {
   });
 
   if (isFetching) {
-    return <div>loading...</div>;
+    return <CustomSpin />;
   }
 
   return (
-    <>
-      <Search
-        style={{ width: "100px" }}
-        value={filters.text}
-        onChange={(e) => updateFilter("text", e.target.value)}
-      />
-      <Menu
-        style={{ width: "150px" }}
-        items={statusFilter}
-        onClick={toggleStatus}
-      />
-      <Menu
-        style={{ width: "150px" }}
-        items={projectFilter}
-        onClick={toggleProject}
-      />
-      <div
-        style={{
-          padding: "16px",
-          display: "flex",
-          justifyContent: "space-between",
-          flexDirection: "column",
-          gap: "8px",
-        }}
-      >
-        {filteredTasks?.map((taskItem) => {
-          return (
-            <TaskItem
-              status={taskItem.status}
-              title={taskItem.title}
-              key={`${taskItem.title} + ${taskItem.id}`}
-              onClick={() => handleTaskClick(taskItem?.id as unknown as number)}
-            />
-          );
-        })}
-        {!filteredTasks?.length && <div>Задачи не найдены</div>}
-        <UpdateForm
-          taskId={selectedTaskId}
-          isModalOpen={isModalOpen}
-          handleModalClose={handleCancel}
-          tasksRefetch={refetch}
+    <IssuesPageStyled style={{ minHeight: "92vh" }}>
+      <IssuesPageFilters>
+        <Search
+          style={{ width: "300px" }}
+          placeholder="Название проекта или исполнитель..."
+          value={filters.text}
+          onChange={(e) => updateFilter("text", e.target.value)}
         />
-      </div>
-    </>
+        <Menu
+          style={{ width: "200px" }}
+          items={statusFilter}
+          onClick={toggleStatus}
+        />
+        <Menu
+          style={{ width: "150px" }}
+          items={projectFilter}
+          onClick={toggleProject}
+        />
+      </IssuesPageFilters>
+      <IssuesPageBody>
+        <IssuesPageFiltersState>
+          <IssuesPageFiltersWrapper>
+            {filters.statuses && (
+              <FilterTitle>Статус: {filters.statuses}</FilterTitle>
+            )}
+            {filters.boardId && (
+              <FilterTitle>
+                Проект:
+                {projectFilter[0].children[
+                  filters?.boardId as unknown as number
+                ]?.label || ""}
+              </FilterTitle>
+            )}
+          </IssuesPageFiltersWrapper>
+
+          {filteredTasks?.map((taskItem) => {
+            return (
+              <TaskItem
+                priority={taskItem.priority}
+                description={taskItem.description}
+                assignee={taskItem.assignee}
+                status={taskItem.status}
+                title={taskItem.title}
+                key={`${taskItem.title} + ${taskItem.id}`}
+                onClick={() =>
+                  handleTaskClick(taskItem?.id as unknown as number)
+                }
+              />
+            );
+          })}
+          {!filteredTasks?.length && <div>Задачи не найдены</div>}
+          <UpdateForm
+            taskId={selectedTaskId}
+            isModalOpen={isModalOpen}
+            handleModalClose={handleCancel}
+            tasksRefetch={refetch}
+          />
+        </IssuesPageFiltersState>
+      </IssuesPageBody>
+    </IssuesPageStyled>
   );
 };

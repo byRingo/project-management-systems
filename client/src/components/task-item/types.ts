@@ -1,5 +1,5 @@
 export interface ITasksProps {
-  assignee?: {
+  assignee: {
     avatarUrl: string;
     email: string;
     fullName: string;
@@ -8,9 +8,9 @@ export interface ITasksProps {
   assigneeId?: number;
   boardId?: number;
   boardName?: string;
-  description?: string;
+  description: string;
   id?: number;
-  priority?: string;
+  priority: string;
   status: string;
   title: string;
   onClick?: () => void;

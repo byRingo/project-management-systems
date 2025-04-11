@@ -6,13 +6,9 @@ import { SelectUserItem } from "../select-user-item/SelectUserItem.tsx";
 import { updateTask } from "../../shared/queries/tasks-controller/update-task/update-task.ts";
 import { ChangeEvent, useEffect } from "react";
 import { updateTaskStatus } from "../../shared/queries/tasks-controller/update-task-status/update-task-status.ts";
-
-interface ITaskFormProps {
-  taskId: number | null;
-  isModalOpen: boolean;
-  handleModalClose: () => void;
-  tasksRefetch: () => void;
-}
+import { useNavigate } from "react-router-dom";
+import { ITaskFormProps } from "./types.ts";
+import { StyledSelect } from "./update-form.styled.ts";
 
 export const UpdateForm = ({
   taskId,
@@ -22,7 +18,13 @@ export const UpdateForm = ({
 }: ITaskFormProps) => {
   const [form] = Form.useForm();
   const { data: taskData, isFetching: isTaskFetching } = useFetchTask(taskId);
+  const navigate = useNavigate();
 
+  const handleBoardClick = (id: number) => {
+    navigate(`/boards/${id}`);
+  };
+
+  //Хук для автозаполнения формы данными
   useEffect(() => {
     if (taskId) {
       form.setFieldsValue({
@@ -36,7 +38,7 @@ export const UpdateForm = ({
     }
   }, [form, taskData, taskId]);
 
-  const { users, projects, priorities, statuses } = useGetFormData();
+  const { users, priorities, statuses } = useGetFormData();
 
   const handleStatusChange = (e: ChangeEvent) => {
     updateTaskStatus(taskId as number, { status: e as unknown as string });
@@ -54,90 +56,95 @@ export const UpdateForm = ({
   }
 
   return (
-    <>
-      <Modal
-        title="Редактирование задачи"
-        open={isModalOpen}
-        footer={null}
-        onCancel={handleModalClose}
+    <Modal
+      title="Редактирование задачи"
+      open={isModalOpen}
+      footer={null}
+      onCancel={handleModalClose}
+    >
+      <Form
+        form={form}
+        variant={"outlined"}
+        layout="vertical"
+        onFinish={onFinish}
+        initialValues={{
+          title: taskData?.title,
+          description: taskData?.description,
+          boardId: taskData?.boardName,
+          priority: taskData?.priority,
+          status: taskData?.status,
+          assigneeId: taskData?.assignee.id,
+        }}
       >
-        <Form
-          form={form}
-          variant={"outlined"}
-          layout="vertical"
-          onFinish={onFinish}
-          initialValues={{
-            title: taskData?.title,
-            description: taskData?.description,
-            boardId: taskData?.boardName,
-            priority: taskData?.priority,
-            status: taskData?.status,
-            assigneeId: taskData?.assignee.id,
-          }}
+        <Form.Item
+          label="Название задачи"
+          name="title"
+          rules={[{ required: true, message: "Введите название задачи" }]}
         >
-          <Form.Item
-            label="Название задачи"
-            name="title"
-            rules={[{ required: true, message: "Введите название задачи" }]}
-          >
-            <Input />
-          </Form.Item>
+          <Input />
+        </Form.Item>
 
-          <Form.Item
-            label="Описание задачи"
-            name="description"
-            rules={[{ required: true, message: "Введите описание задачи" }]}
-          >
-            <Input.TextArea />
-          </Form.Item>
+        <Form.Item
+          label="Описание задачи"
+          name="description"
+          rules={[{ required: true, message: "Введите описание задачи" }]}
+        >
+          <Input.TextArea />
+        </Form.Item>
 
-          <Form.Item
-            label="Проект"
-            name="boardId"
-            rules={[{ required: true, message: "Введите название проекта" }]}
+        <Form.Item
+          label="Проект"
+          name="boardId"
+          rules={[{ required: true, message: "Введите название проекта" }]}
+        >
+          <StyledSelect disabled />
+        </Form.Item>
+        <Form.Item
+          label="Приоритет"
+          name="priority"
+          rules={[{ required: true, message: "Введите приоритет" }]}
+        >
+          <Select options={priorities} />
+        </Form.Item>
+        <Form.Item
+          label="Статус"
+          name="status"
+          rules={[{ message: "Введите статус" }]}
+        >
+          <Select onChange={handleStatusChange} options={statuses} />
+        </Form.Item>
+        <Form.Item
+          label="Исполнитель"
+          name="assigneeId"
+          rules={[{ required: true, message: "Введите исполнителя" }]}
+        >
+          <Select
+            options={users?.map((item) => {
+              return {
+                label: (
+                  <SelectUserItem
+                    userName={item.label}
+                    userImgUrl={item.imgUrl}
+                  />
+                ),
+                value: item.value,
+              };
+            })}
+          />
+        </Form.Item>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <Button
+            onClick={() => handleBoardClick(taskData?.id as unknown as number)}
           >
-            <Select options={taskData ? [] : projects} />
-          </Form.Item>
-          <Form.Item
-            label="Приоритет"
-            name="priority"
-            rules={[{ required: true, message: "Введите приоритет" }]}
-          >
-            <Select options={priorities} />
-          </Form.Item>
-          <Form.Item
-            label="Статус"
-            name="status"
-            rules={[{ message: "Введите статус" }]}
-          >
-            <Select onChange={handleStatusChange} options={statuses} />
-          </Form.Item>
-          <Form.Item
-            label="Исполнитель"
-            name="assigneeId"
-            rules={[{ required: true, message: "Введите исполнителя" }]}
-          >
-            <Select
-              options={users?.map((item) => {
-                return {
-                  label: (
-                    <SelectUserItem
-                      userName={item.label}
-                      userImgUrl={item.imgUrl}
-                    />
-                  ),
-                  value: item.value,
-                };
-              })}
-            />
-          </Form.Item>
+            Перейти на доску
+          </Button>
           <Form.Item style={{ display: "flex", justifyContent: "flex-end" }}>
             <Button type="primary" htmlType="submit">
               Обновить
             </Button>
           </Form.Item>
-        </Form>
-      </Modal>
-    </>
+        </div>
+      </Form>
+    </Modal>
   );
 };
