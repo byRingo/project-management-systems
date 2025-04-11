@@ -2,6 +2,7 @@ import { Button } from "antd";
 import { Link, Outlet } from "react-router-dom";
 import { useState } from "react";
 import { CreateForm } from "../../components/create-form/CreateForm.tsx";
+import { LayoutHeaderWrapper } from "./layout.styled.ts";
 
 function Layout() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -17,23 +18,13 @@ function Layout() {
   return (
     <>
       <header>
-        <div
-          style={{
-            height: "2.25rem",
-            backgroundColor: "gray",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-evenly",
-          }}
-        >
+        <LayoutHeaderWrapper>
           <Link to={"/issues"}>Все задачи</Link>
           <Link to={"/boards"}>Проекты</Link>
           <Button onClick={showModal}>Создать задачу</Button>
-        </div>
+        </LayoutHeaderWrapper>
       </header>
-
       <CreateForm isModalOpen={isModalOpen} onCancel={handleCancel} />
-
       <Outlet />
     </>
   );

@@ -1,0 +1,9 @@
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <g id="SVGRepo_bgCarrier" stroke-width="0"/>
+    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+    <g id="SVGRepo_iconCarrier">
+        <rect/>
+        <path d="M6 14H18" stroke="#FFA500" stroke-linecap="round" stroke-linejoin="round"/> <!-- Оранжевый -->
+        <path d="M6 10H18" stroke="#FFA500" stroke-linecap="round" stroke-linejoin="round"/> <!-- Более темный оранжевый -->
+    </g>
+</svg>

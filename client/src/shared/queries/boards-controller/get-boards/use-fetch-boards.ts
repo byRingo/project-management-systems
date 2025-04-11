@@ -7,6 +7,8 @@ export const useFetchBoards = () => {
     queryFn: () => {
       return getBoards();
     },
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
   return { data, error, isFetching };
 };

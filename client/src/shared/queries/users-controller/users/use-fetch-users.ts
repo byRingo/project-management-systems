@@ -7,6 +7,8 @@ export const useFetchUsers = () => {
     queryFn: () => {
       return getUsers();
     },
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
   return { data, error, isFetching };
 };

@@ -4,9 +4,7 @@ import { getTasks } from "./get-tasks.ts";
 export const useFetchTasks = () => {
   const { data, error, isFetching, refetch } = useQuery({
     queryKey: ["tasks-controller/tasks"],
-    queryFn: () => {
-      return getTasks();
-    },
+    queryFn: getTasks,
   });
   return { data, error, isFetching, refetch };
 };
