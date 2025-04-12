@@ -6,12 +6,13 @@ export interface ITasksProps {
     id: number;
   };
   assigneeId?: number;
-  boardId?: number;
+  boardId: number;
   boardName?: string;
   description: string;
   id?: number;
   priority: string;
   status: string;
   title: string;
-  onClick?: () => void;
+  onItemClick?: () => void;
+  onButtonClick: (id: number) => void;
 }

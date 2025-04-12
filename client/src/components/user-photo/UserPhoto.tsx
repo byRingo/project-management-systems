@@ -1,9 +1,10 @@
 import { IUserPhotoProps } from "./types.ts";
 
+//Компонент фотографии пользователя
 export const UserPhoto = ({
   userImgUrl,
-  width = "20px",
-  height = "20px",
+  width = "1.25rem",
+  height = "1.25rem",
 }: IUserPhotoProps) => {
   return (
     <img

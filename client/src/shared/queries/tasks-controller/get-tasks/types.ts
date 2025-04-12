@@ -1,4 +1,4 @@
-interface ITaskItem {
+export interface ITaskItem {
   assignee: {
     avatarUrl: string;
     email: string;

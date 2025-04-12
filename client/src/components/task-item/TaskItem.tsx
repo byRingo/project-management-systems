@@ -16,13 +16,15 @@ import { TaskPriority } from "../task-priority/TaskPriority.tsx";
 export const TaskItem = ({
   title,
   status,
-  onClick,
+  onItemClick,
+  onButtonClick,
   assignee,
   description,
   priority,
+  boardId,
 }: ITasksProps) => {
   return (
-    <TaskItemStyled onClick={onClick}>
+    <TaskItemStyled onClick={onItemClick}>
       <TaskItemWrapper>
         <TaskItemProperty>
           <PropertyName>Приоритет</PropertyName>
@@ -38,13 +40,13 @@ export const TaskItem = ({
         </TaskTitleWrapper>
       </TaskItemWrapper>
       <TaskItemWrapper>
-        <Button>Перейти к доске</Button>
+        <Button onClick={() => onButtonClick(boardId)}>Перейти к доске</Button>
         <Tooltip title={`Исполнитель: ${assignee.fullName}`}>
           <div>
             <UserPhoto
               userImgUrl={assignee.avatarUrl}
-              width={"20px"}
-              height={"20px"}
+              width={"1.25rem"}
+              height={"1.25rem"}
             />
           </div>
         </Tooltip>

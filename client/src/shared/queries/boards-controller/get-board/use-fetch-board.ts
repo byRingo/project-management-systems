@@ -7,7 +7,7 @@ export const useFetchBoard = (boardId: number) => {
     queryFn: () => {
       return getBoard(boardId);
     },
-    enabled: !!boardId,
+    enabled: false,
   });
   return { data, error, isFetching, refetch };
 };

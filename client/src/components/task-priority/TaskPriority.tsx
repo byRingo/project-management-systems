@@ -4,6 +4,7 @@ import LineDownIcon from "../icons/LineDownIcon.svg";
 import LineUpIcon from "../icons/LineUpIcon.svg";
 import { TaskPriorityStyled } from "./task-priority.styled.ts";
 
+//Компонент отображающий приоритет задачи
 export const TaskPriority = ({ taskPriority }: ITaskPriorityProps) => {
   return (
     <TaskPriorityStyled>
