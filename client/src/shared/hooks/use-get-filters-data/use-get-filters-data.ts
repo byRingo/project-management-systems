@@ -7,18 +7,20 @@ export const STATUSES = [
   { key: "Backlog", label: "In Backlog" },
 ];
 
+//Хук для получения данных для фильтров страницы Все задачи
 export const useGetFiltersData = () => {
   const { data: projects } = useFetchBoards();
 
   const projectsData =
     projects?.map((project) => {
       return {
-        key: project.id as unknown as string,
+        key: `${project.id}`,
         label: project.name,
       };
     }) || [];
   projectsData.unshift({ key: "", label: "Все" });
 
+  //Фильтр по проектам
   const projectFilter = [
     {
       key: "taskProject",
@@ -27,6 +29,7 @@ export const useGetFiltersData = () => {
     },
   ];
 
+  //Фильтр по статусам
   const statusFilter = [
     {
       key: "tasksStatus",

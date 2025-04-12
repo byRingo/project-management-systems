@@ -4,8 +4,8 @@ export const TaskItemStyled = styled("div")`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 30px;
-  padding: 10px;
+  gap: 1.875rem;
+  padding: 0.625rem;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
@@ -20,7 +20,7 @@ export const TaskTitleWrapper = styled("div")`
 `;
 
 export const TaskTitle = styled("div")`
-  font-size: 20px;
+  font-size: 1.25rem;
 `;
 
 export const TaskDescription = styled("div")`
@@ -28,14 +28,14 @@ export const TaskDescription = styled("div")`
 `;
 
 export const TaskStatus = styled("div")`
-  height: 30px;
+  height: 1.875rem;
 `;
 
 export const TaskItemWrapper = styled("div")`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 10px;
+  gap: 0.625rem;
 `;
 
 export const TaskItemProperty = styled("div")`
@@ -45,6 +45,6 @@ export const TaskItemProperty = styled("div")`
 `;
 
 export const PropertyName = styled("div")`
-  font-size: 10px;
+  font-size: 0.625rem;
   color: gray;
 `;

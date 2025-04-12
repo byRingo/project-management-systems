@@ -4,22 +4,19 @@ import { postTask } from "../../shared/queries/tasks-controller/post-task/post-t
 import { ITaskBody } from "../../shared/queries/tasks-controller/post-task/types.ts";
 import { SelectUserItem } from "../select-user-item/SelectUserItem.tsx";
 import { useFetchTasks } from "../../shared/queries/tasks-controller/get-tasks/use-fetch-tasks.ts";
+import { ITaskFormProps } from "./types.ts";
 
-interface ITaskFormProps {
-  isModalOpen: boolean;
-  onCancel: () => void;
-}
-
+//Компонент Формы создания задачи
 export const CreateForm = ({ isModalOpen, onCancel }: ITaskFormProps) => {
   const [form] = Form.useForm();
-  const { refetch } = useFetchTasks();
+  const { refetch: refetchTasks } = useFetchTasks();
   const { users, projects, priorities } = useGetFormData();
 
   const onFinish = (values: ITaskBody) => {
     postTask(values)
+      .then(() => refetchTasks())
       .then(() => form.resetFields())
-      .then(() => onCancel())
-      .then(() => refetch());
+      .then(() => onCancel());
   };
 
   return (

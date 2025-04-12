@@ -8,6 +8,7 @@ import {
   StyledBoardItem,
 } from "./board-item.styled.ts";
 
+//Компонент проекта для страницы Проекты
 export const BoardItem = ({
   description,
   name,

@@ -10,19 +10,18 @@ import { useNavigate } from "react-router-dom";
 import { ITaskFormProps } from "./types.ts";
 import { StyledSelect } from "./update-form.styled.ts";
 
+//Компонент Формы редактирования задачи
 export const UpdateForm = ({
   taskId,
   isModalOpen,
   handleModalClose,
   tasksRefetch,
 }: ITaskFormProps) => {
-  const [form] = Form.useForm();
-  const { data: taskData, isFetching: isTaskFetching } = useFetchTask(taskId);
   const navigate = useNavigate();
+  const [form] = Form.useForm();
 
-  const handleBoardClick = (id: number) => {
-    navigate(`/boards/${id}`);
-  };
+  const { data: taskData } = useFetchTask(taskId);
+  const { users, priorities, statuses } = useGetFormData();
 
   //Хук для автозаполнения формы данными
   useEffect(() => {
@@ -38,10 +37,12 @@ export const UpdateForm = ({
     }
   }, [form, taskData, taskId]);
 
-  const { users, priorities, statuses } = useGetFormData();
+  const handleBoardClick = (id: number) => {
+    navigate(`/boards/${id}`);
+  };
 
   const handleStatusChange = (e: ChangeEvent) => {
-    updateTaskStatus(taskId as number, { status: e as unknown as string });
+    updateTaskStatus(taskId as number, { status: `${e}` });
   };
 
   const onFinish = (values: ITaskBody) => {
@@ -50,10 +51,6 @@ export const UpdateForm = ({
       .then(() => handleModalClose())
       .then(() => tasksRefetch());
   };
-
-  if (isTaskFetching) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <Modal

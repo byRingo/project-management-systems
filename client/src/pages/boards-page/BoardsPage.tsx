@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { CustomSpin } from "../../components/custom-spin/CustomSpin.tsx";
 import { BoardsPageStyled, BoardsPageWrapper } from "./boards-page.styled.ts";
 
+//Страница всех проектов
 export const BoardsPage = () => {
   const { data: boards, isFetching } = useFetchBoards();
   const navigate = useNavigate();

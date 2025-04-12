@@ -8,27 +8,38 @@ export const IssuesPageFilters = styled("div")`
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 20px;
-  padding: 20px;
+  gap: 1.25rem;
+  padding: 1.25rem;
 `;
 
 export const IssuesPageBody = styled("div")`
   display: flex;
   justify-content: center;
-`;
-
-export const IssuesPageFiltersState = styled("div")`
-  display: flex;
-  flex-direction: column;
-  padding: 16px;
-  gap: 8px;
+  align-items: flex-end;
 `;
 
 export const IssuesPageFiltersWrapper = styled("div")`
   display: flex;
-  gap: 30px;
+  gap: 1.875rem;
 `;
 
 export const FilterTitle = styled("div")`
-  font-size: 14px;
+  font-size: 0.875rem;
+`;
+
+export const ContentWrapper = styled("div")`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0.5rem;
+  align-items: flex-end;
+`;
+
+export const TasksContainer = styled("div")`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 37.375rem;
+  overflow-x: hidden;
+  overflow-y: auto;
 `;

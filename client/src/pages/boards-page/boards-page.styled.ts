@@ -10,6 +10,6 @@ export const BoardsPageStyled = styled("div")`
 export const BoardsPageWrapper = styled("div")`
   display: flex;
   flex-direction: column;
-  padding: 24px;
-  gap: 8px;
+  padding: 1.5rem;
+  gap: 0.5rem;
 `;
